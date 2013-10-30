@@ -39,11 +39,12 @@
                     for (Customer simpleCustomer : customers) { 
                 %>
                 <tr>
-                    <td><a href="CustomerController?customerIdentity=<% simpleCustomer.getId(); %> & submit=Get Customer"><% simpleCustomer.getId(); %></a></td>
-                    <td><% simpleCustomer.getName(); %></td>
-                    <td><% simpleCustomer.getAddr(); %></td>
+                    <td><a href="CustomerController?customerIdentity=<%=simpleCustomer.getId()%>&submit=Get Customer"><%=simpleCustomer.getId()%></a></td>
+                    <td><%=simpleCustomer.getName()%></td>
+                    <td><%=simpleCustomer.getAddr()%></td>
                     <td>
-                        <a href="PortfolioController?customerIdentity=<%= simpleCustomer.getId() %>">View</a>
+                        Get Customer
+                        <a href="PortfolioController?customerIdentity=<%=simpleCustomer.getId()%>">View</a>
                     </td>
                 </tr>
                 <%

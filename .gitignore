@@ -4,3 +4,9 @@
 *.jar
 *.war
 *.ear
+
+# Folder
+build/
+bin/
+nbproject/private/
+dist/
