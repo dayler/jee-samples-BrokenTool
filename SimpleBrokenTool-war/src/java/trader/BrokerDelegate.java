@@ -4,6 +4,12 @@
  */
 package trader;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 /**
  *
  * @author java
@@ -11,7 +17,9 @@ package trader;
 public class BrokerDelegate {
     private static final BrokerDelegate BROKER_DELEGATE;
     
-    private BrokerModel model = BrokerModelImpl.getInstance();
+    //private BrokerModel model = BrokerModelImpl.getInstance();
+    
+    private Context context;
     
     static {
         BROKER_DELEGATE = new BrokerDelegate();
@@ -21,55 +29,70 @@ public class BrokerDelegate {
         return BROKER_DELEGATE;
     }
     
-    private BrokerDelegate() {}
+    private BrokerDelegate() {
+        try {
+            context = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(BrokerDelegate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private synchronized BrokerModel getModel() {
+        try {
+            return (BrokerModel) context.lookup("java:comp/env/BrokerLookup");
+        } catch (NamingException ex) {
+            Logger.getLogger(BrokerDelegate.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 
     public Customer addCustomer(String customerId, String name, String address) throws BrokerException {
         Customer customer = new Customer(customerId, name, address);
-        model.addCustomer(customer);
+        getModel().addCustomer(customer);
         return customer;
     }
 
     public Customer getCustomer(String customerId) throws BrokerException {
-        return model.getCustomer(customerId);
+        return getModel().getCustomer(customerId);
     }
 
     public Customer updateCustomer(String customerId, String name, String address) throws BrokerException {
         Customer customer = new Customer(customerId, name, address);
-        model.updateCustomer(customer);
+        getModel().updateCustomer(customer);
         
-        return model.getCustomer(customerId);
+        return getModel().getCustomer(customerId);
     }
     
     public void deleteCustomer(String customerId) throws BrokerException {
-        Customer customer = model.getCustomer(customerId);
-        model.deleteCustomer(customer);
+        Customer customer = getModel().getCustomer(customerId);
+        getModel().deleteCustomer(customer);
     }
 
     public Customer[] getAllCustomers() throws BrokerException {
-        return model.getAllCustomers();
+        return getModel().getAllCustomers();
     }
    
     public Stock getStock(String symbol) throws BrokerException {
-        return model.getStock(symbol);
+        return getModel().getStock(symbol);
     }
     
     public Stock[] getAllStocks() throws BrokerException {
-        return model.getAllStocks();
+        return getModel().getAllStocks();
     }
         
     public CustomerShare addCustomerShare(String customerId, String stockSymbol, int quantity) throws BrokerException {
         CustomerShare share = new CustomerShare(customerId, stockSymbol, quantity);
-        model.addCustomerShare(share);
+        getModel().addCustomerShare(share);
         return share;
     }
 
     public CustomerShare updateCustomerShare(String customerId, String stockSymbol, int quantity) throws BrokerException {
         CustomerShare share = new CustomerShare(customerId, stockSymbol, quantity);
-        model.updateCustomerShare(share);
+        getModel().updateCustomerShare(share);
         return share;
     }
              
     public CustomerShare[] getAllCustomerShares(String customerId) throws BrokerException {
-        return model.getAllCustomerShares(customerId);
+        return getModel().getAllCustomerShares(customerId);
     }
 }

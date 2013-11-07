@@ -1,10 +1,12 @@
 
 package trader;
 
+import java.io.Serializable;
 import java.util.*;
-import trader.Customer;
+import javax.ejb.Remote;
+import javax.ejb.Stateful;
 
-
+@Remote @Stateful
 public class BrokerModelImpl implements BrokerModel{
     
     private List<Customer> customers = new ArrayList<Customer>();
@@ -13,12 +15,12 @@ public class BrokerModelImpl implements BrokerModel{
 
     private static BrokerModel instance = new BrokerModelImpl();
     
-    public static BrokerModel getInstance() {
-        return instance;
-    }
+//    public static BrokerModel getInstance() {
+//        return instance;
+//    }
         
     /** Creates a new instance of BrokerModelImpl */
-    private BrokerModelImpl(){
+    public BrokerModelImpl(){
         customers.add(new Customer("111-11-1111", "Test Customer", "2222 Easy Street, West Beach AZ"));
         customers.add(new Customer("999-45-9034", "Asok Perumainar", "1444 England Lane, Broomfield CO"));
         customers.add(new Customer("999-78-9012", "Anthony Orapallo", "123 Tea Street, Columbia MD"));

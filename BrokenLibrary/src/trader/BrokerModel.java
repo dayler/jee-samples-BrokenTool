@@ -1,7 +1,5 @@
 package trader;
 
-import trader.Customer;
-
 public interface BrokerModel {
     
 // Customer segment state change methods
